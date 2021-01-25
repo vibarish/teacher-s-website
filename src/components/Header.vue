@@ -28,6 +28,7 @@
                 <router-link to="/kids" >Ученикам </router-link>
                 <router-link to="/parents" >Родителям </router-link>
                 <router-link to="/media" >Фото </router-link>
+                <router-link to="/admin" v-if="isAdminLogged" > Админ </router-link>
               </div>
             </nav>
           </div>
@@ -42,55 +43,57 @@
   </div>
 </template>
 <script>
-import Sidebar from './Sidebar.vue'
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex'
+import Sidebar from './Sidebar.vue';
   export default {
-    data() {
-      return {
-        isActive: false,
-        sidebarIsActive: false
-      }
-    },
     components: {
       'sidebar-component': Sidebar
     },
-    computed: {
-      isLoggedIn() {
-        return this.$store.getters.isAuthenticated;
-      },
-      isAdminLogged() {
-        return this.$store.getters.isAuthAsAdmin;
-      }
-    },
-    methods: {
-      outHandler() {
-        if (!this.sidebarIsActive) {
-          this.isActive = false;
+    setup() {
+      const isActive = ref(false);
+      const sidebarIsActive = ref(false);
+
+      const store = useStore();
+
+      const isLoggedIn = computed(() => {
+         return store.getters.isAuthenticated;
+      })
+      const isAdminLogged = computed(() => {
+        return store.getters.isAuthAsAdmin;
+      })
+
+      const outHandler = () => {
+        if (!sidebarIsActive.value) {
+          isActive.value = false;
           document.body.classList.remove('modal-open')
         }
         else {
           return;
         }
-      },
-      activeHandler() {
-        this.isActive = !this.isActive
-        if (this.isActive == true)
+      }
+
+      const activeHandler = () => {
+        isActive.value = !isActive.value
+        if (isActive.value == true)
           document.body.classList.add('modal-open')
         else 
           document.body.classList.remove('modal-open')
-      },
-      sideBarHandler() {
-        this.sidebarIsActive = !this.sidebarIsActive;
-        if (this.sidebarIsActive == true) {
+      }
+
+      const sideBarHandler = () => {
+        sidebarIsActive.value = !sidebarIsActive.value;
+        if (sidebarIsActive.value == true) {
           document.body.classList.add('modal-open');
         }
         else 
           document.body.classList.remove('modal-open')
-      },
-      onDemand() {
-      },
-    },
-    mounted() {
-      this.onDemand();
+      }
+
+      return {
+        isActive, sidebarIsActive,isLoggedIn, isAdminLogged, outHandler,
+        activeHandler, sideBarHandler
+      }
     }
   }
 </script>

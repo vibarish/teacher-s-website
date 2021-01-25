@@ -19,7 +19,7 @@ firebase.initializeApp(firebaseConfig);
 
 import authModule from './store/modules/auth/index'
 
-const store = createStore({
+export const store = createStore({
   modules: {
     auth: authModule
   }

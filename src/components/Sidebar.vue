@@ -9,7 +9,7 @@
       Сайт учителя немецкого языка <br>  Барышниковой Татьяны Олеговны <br>
       (ГБОУ СОШ 111 г. Санкт-Петербург)
     </p>
-    <form id="input-form" @submit.prevent="submitForm">
+    <form class="input-form" @submit.prevent="submitForm">
       <div v-if="!isLoggedIn">
         <div>
           <span v-if="mode === 'login'"> Войти </span>
@@ -48,127 +48,127 @@
 </template>
 <script>
 import firebase from "firebase";
+import { computed, ref, watch } from 'vue';
+import { useStore } from 'vuex'
 
 export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-      formIsValid: true,
-      mode: "login",
-      isLoading: false,
-      error: null,
-      erMsgActive: false,
-      erMsgText: '',
-    };
-  },
-  watch: {
-    formIsValid() {
-      console.log(`Форма верна ${this.formIsValid}, Время вышло ${this.errorTimeExpire}`);
-      setTimeout(() => this.errorTimeExpire = true, 3000);
+  setup(_1, context) {
+    const email = ref('');
+    const password = ref('');
+    const formIsValid = ref(true);
+    const mode = ref('login');
+    const isLoading = ref(false);
+    const error = ref(null);
+    const erMsgActive = ref(false);
+    const erMsgText = ref('');
+
+    const store = useStore();
+
+    const errorTimer = () => {
+      return setTimeout(() => erMsgActive.value = true, 2000);
     }
-  },
-  computed: {
-    isAdminLogged() {
-      return this.$store.getters.isAuthAsAdmin;
-    },
-    isLoggedIn() {
-      return this.$store.getters.isAuthenticated;
-    },
-    submitButtonCaption() {
-      if (this.mode === "login") {
-        return "Войти";
-      } else {
-        return "Регистрация";
-      }
-    },
-    switchModeButtonCaption() {
-      if (this.mode === "login") {
-        return "Регистрация";
-      } else {
-        return "Войти";
-      }
+    
+    const logout = () => {
+      email.value = "";
+      password.value = "";
+      return store.dispatch('logout');
     }
-  },
-  methods: {
-    errorTimer() {
-      return setTimeout(() => this.errorTimeExpire = true, 2000);
-    },
-    logout() {
-      this.email = "";
-      this.password = "";
-      return this.$store.dispatch('logout');
-    },
-    async submitForm() {
+
+    const submitForm = async function() {
       if (
-        this.email === "" ||
-        this.password === "" ||
-        // this.email.length > 20 ||
-        this.password.length < 6
+        email.value === "" ||
+        password.value === "" ||
+        password.value.length < 6
       ) {
-        this.formIsValid = false;
-        this.erMsgActive = true;
-        this.erMsgText =`Пожайлуста введите корректные данные 
+        formIsValid.value = false;
+        erMsgActive.value = true;
+        erMsgText.value =`Пожайлуста введите корректные данные 
                         (Пароль больше 6 символов, заполненные поля почты и пароля)`
-        setTimeout(() => this.erMsgActive = false, 3000);
+        setTimeout(() => erMsgActive.value = false, 3000);
         return;
       }
 
-      this.formIsValid = true;
-      this.isLoading = true;
+      formIsValid.value = true;
+      isLoading.value = true;
 
       try {
-        if (this.mode === "login") {
+        if (mode.value === "login") {
            await firebase
            .auth()
-           .signInWithEmailAndPassword(this.email, this.password); 
+           .signInWithEmailAndPassword(email.value, password.value); 
 
-          await this.$store.dispatch("login", {
-            email: this.email,
-            password: this.password,
+          await store.dispatch("login", {
+            email: email.value,
+            password: password.value,
           });
         } else {
-          await this.$store.dispatch("signup", {
-            email: this.email,
-            password: this.password,
+          await store.dispatch("signup", {
+            email: email.value,
+            password: password.value,
           });
         }
-        // this.$router.replace('/admin');
       } catch (err) {
-        // alert('Такой пользователь еще не зарегистрирован!'); 
-        this.erMsgActive = true;
-        this.erMsgText =`Такой пользователь еще не зарегистрирован!`
-        setTimeout(() => this.erMsgActive = false, 3000);       
-        this.error = err.message || "Не удалось зарегистрироваться";
+        erMsgActive.value = true;
+        erMsgText.value =`Такой пользователь еще не зарегистрирован!`
+        setTimeout(() => erMsgActive.value = false, 3000);       
+        error.value = err.message || "Не удалось зарегистрироваться";
       }
 
-      this.isLoading = false;
-    },
-    switchAuthMode() {
-      if (this.mode === "login") {
-        this.mode = "signup";
-      } else {
-        this.mode = "login";
-      }
-    },
-    closeBar() {
-      this.$emit("close-bar");
-    },
-    adminHandler() {
-      this.closeBar();
+      isLoading.value = false;
     }
-  },
-  // created() { 
-  //   firebase.auth().onAuthStateChanged(userAuth => 
-  //   { if (userAuth) 
-  //     { firebase.auth().currentUser.getIdTokenResult()
-  //       .then(tokenResult =>
-  //       { 
-  //         console.log(tokenResult.claims); 
-  //         });
-  //     } 
-  //   });
-  // }
+
+    const switchAuthMode = () => {
+      if (mode.value === "login") {
+        mode.value = "signup";
+      } else {
+        mode.value = "login";
+      }
+    }
+
+    const closeBar = () => {
+      context.emit("close-bar");
+    }
+
+    const adminHandler = () => {
+      closeBar();
+    }
+
+    watch(formIsValid, () => {
+      console.log(`Форма верна ${formIsValid.value}, Время вышло ${erMsgActive.value}`);
+      setTimeout(() => erMsgActive.value = true, 3000);
+    })
+
+    const isAdminLogged = computed(() => {
+      return store.getters.isAuthAsAdmin;
+    })
+
+    const isLoggedIn = computed(() => {
+      return store.getters.isAuthenticated;
+    })
+
+    const submitButtonCaption = computed(() => {
+      if (mode.value === "login") {
+        return "Войти";
+      } else {
+        return "Регистрация";
+      }
+    })
+
+    const switchModeButtonCaption = computed(() => {
+      if (mode.value === "login") {
+        return "Регистрация";
+      } else {
+        return "Войти";
+      }
+    })
+
+    return {
+      email, password, formIsValid, mode, isLoading, error,
+      erMsgActive, erMsgText, errorTimer, logout, submitForm,
+      switchAuthMode, closeBar, adminHandler, isAdminLogged,
+      isLoggedIn, submitButtonCaption, switchModeButtonCaption
+    }
+  }
 };
 </script>
 <style scoped>
@@ -180,7 +180,7 @@ h3 {
   text-align: justify;
   line-height: 1.25;
 }
-#input-form {
+.input-form {
   display: flex;
   flex-direction: column;
   width: 15rem;

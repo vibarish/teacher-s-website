@@ -5,7 +5,6 @@
     <h2> Статьи по немецкому языку</h2>
     <button @click="back" class="prev">Предыдущая статья</button>
     <button @click="forward" class="next">Следующая статья</button>
-
     <component class="article" :is="articleLoop()">
       <p>Default</p>
     </component>  
@@ -17,52 +16,58 @@ import article2 from '../Content/article2';
 import article3 from '../Content/Article3'
 import article4 from '../Content/Article5'
 
+import { ref, onMounted } from 'vue'
+
 export default {
   components: {
     article1
   },
-  data() {
-    return {
-      selectedArticle: article1,
-      currentPage: 1,
-      news: 'Новостей пока нет'
-    }
-  },
-   methods: {
-    forward() {
-       if (this.currentPage > 0 && this.currentPage < 4)
-        this.currentPage += 1
+  setup() {
+    const selectedArticle = ref(article1);
+    const currentPage = ref(1);
+    const news = ref('Новостей пока нет');
+
+  const forward = () => {
+    if (currentPage.value > 0 && currentPage.value < 4)
+        currentPage.value += 1
       else {
-        this.currentPage = 1;
+        currentPage.value = 1;
       }
-    },
-    back() {
-      if (this.currentPage > 1 && this.currentPage < 5)
-        this.currentPage -= 1
+  }
+
+  const back = () => {
+    if (currentPage.value > 1 && currentPage.value < 5)
+        currentPage.value -= 1
       else {
-        this.currentPage = 4;
+        currentPage.value = 4;
       }
-    },
-    articleLoop() {
-      switch (this.currentPage) {
-        case 1: return this.selectedArticle = article1;
-        case 2: return this.selectedArticle = article2;
-        case 3: return this.selectedArticle = article3;
-        case 4: return this.selectedArticle = article4;
-      }
-    },
-    getNews() {
-      fetch('https://teacher-bab78.firebaseio.com/news.json').then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-        }).then((data) => {
-          this.news = data.currentNews;
-        });
+  }
+
+  const articleLoop = () => {
+    switch (currentPage.value) {
+      case 1: return selectedArticle.value = article1;
+      case 2: return selectedArticle.value = article2;
+      case 3: return selectedArticle.value = article3;
+      case 4: return selectedArticle.value = article4;
     }
-  },
-  mounted() {
-    this.getNews();
+  }
+
+  const getNews = () => {
+    fetch('https://teacher-bab78.firebaseio.com/news.json').then((response) => {
+      if (response.ok) {
+          return response.json();
+        }
+    }).then((data) => {
+      news.value = data.currentNews;
+    });
+  }
+
+  onMounted(getNews);
+
+  return {
+    selectedArticle, currentPage, news,
+    forward, back, articleLoop, getNews
+  }
   }
 }
 </script>

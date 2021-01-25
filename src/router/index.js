@@ -12,7 +12,15 @@ import kidsInfo from '../components/Kids'
 import parents from '../components/Parents'
 import media from '../components/Media'
 import admin from '../components/Admin'
+import sidebar from '../components/Sidebar'
 import notFound from '../components/NotFound'
+
+// import { store } from '../main'
+
+// export function getAuth () {
+//   return store.state.isAdmin;
+// }
+// console.log(store);
 
 const routes = [
   { 
@@ -26,7 +34,7 @@ const routes = [
   },
   {
     path: '/admin',
-    name: 'Панель администратора',
+    name: 'adminPanel',
     component: admin,
     // meta: {needsAuth: true},
   },
@@ -77,6 +85,11 @@ const routes = [
     name: 'Медиа',
     component: media,
   },
+  {
+    path: '/sidebar',
+    name: 'sidebar',
+    component: sidebar
+  }
 ]
 
 const router = createRouter({
@@ -93,11 +106,13 @@ const router = createRouter({
   }
 })
 
-router.beforeEach(function(to, from, next) {
-  if (to.meta.needsAuth) {
-    console.log('Требуется Регистрация!');
-  }
-  next();
-})
+// router.beforeEach(function(to, from, next) {
+//   if (to.meta.needsAuth) {
+//     console.log('Требуется Регистрация!');
+//     next({name: 'sidebar'})
+//   }
+//   // // console.log(store.isAuthAsAdmin);
+//   next();
+// })
 
 export default router

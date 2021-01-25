@@ -22,7 +22,6 @@
       <a href="https://drive.google.com/file/d/1lnKezXjdKJh5lrbWRY0ndlWfLVn90UiJ/view?usp=sharing"  target="blank">Глаголы с sein</a>
       <a href="https://drive.google.com/file/d/1zUkLOSL5VUw8lUj7Y7qrcJeodzjHyB3t/view?usp=sharing"  target="blank">Спряжение сильных глаголов</a>
 
-      <a href="https://firebasestorage.googleapis.com/v0/b/teacher-bab78.appspot.com/o/Nikolaustag.docx?alt=media&token=6a9221ef-6d06-40f6-b6bd-d752603effd5"  target="blank">Firebase</a>
     </ul>
   </div>
 </template>
