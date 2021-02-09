@@ -1,43 +1,26 @@
 <template>
   <div>
     Материалы для 5 класса
-    <ul>
-      <a :href="myFile" v-for="item in fileArray" :key="item.id" >{{ item }} </a>
-    </ul>
+    <div class="columns">
+      <ul>
+        <!-- Имена файлов -->
+        <a v-for="item in nameArray" :key="item.id" > {{ item }} </a>
+      </ul>
+      <ul>
+        <!-- Путь для скачивания -->
+        <a :href="item" v-for="item in fileArray" :key="item.id" > Скачать </a>
+      </ul>
+    </div>
   </div>
 </template>
 <script>
-import firebase from 'firebase';
-import { ref, reactive } from 'vue'
+import useDownload  from '../../hooks/firebaseDownload';
 
 export default {
   setup() {
-    const myFile = ref(null);
-    const fileFromArray = ref(null);
-    const fileArray = reactive([]);
+    const [ fileArray, nameArray ] = useDownload('class5');
 
-    const storage = firebase.storage();
-    const listRef = storage.ref('class5');
-
-    const storageAllFiles = listRef.listAll()
-      .then((res) => {
-        res.items.forEach((itemRef) => {
-      // All the items under listRef.
-          fileArray.push(itemRef.name);
-          console.log(fileArray[3]);
-
-          storage.ref('class5/' + itemRef.name).getDownloadURL().then(
-            imgUrl => {
-              myFile.value = imgUrl;
-            }
-          );
-    });
-      })
-
-    return {
-      myFile, storageAllFiles,
-      fileArray, fileFromArray
-    }
+    return { fileArray, nameArray }
   }
 }
 </script>
@@ -45,5 +28,9 @@ export default {
   ul {
     display: flex;
     flex-direction: column;
+  }
+  .columns {
+    display: flex;
+    flex-direction: row;
   }
 </style>
