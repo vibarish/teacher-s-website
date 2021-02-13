@@ -26,7 +26,6 @@ export default {
     const isLoggedIn = computed(() => {
       return store.getters.isAuthenticated;
     })
-    console.log('Залогинился?',isLoggedIn);
 
     return { fileArray, nameArray, isLoggedIn }
 }
