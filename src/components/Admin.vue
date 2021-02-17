@@ -16,27 +16,33 @@
           </textarea>
           <button @click="sendParents" v-if="inputToggle === true">Опубликовать</button>
         </div>
+        <hr>
         <div class="download" >
-          <h3>Загрузить файл</h3>
+          <h4>Загрузить файл</h4>
           <select v-model="selected">
-            <option disabled value="">Ваш выбор</option>
             <option>Добавить в методику</option>
             <option>Добавить в 5 класс</option>
+            <option>Добавить в Фотогалерею</option>
           </select>
-          <span>Добавляем файл в раздел:</span>
           <span style="color: blue">{{ selected }}</span>
           <input type="file" @change="previewImage" id="actual-btn" hidden/>
           <label for="actual-btn">Открыть файл</label>
+          <div v-if="imageData!=null">
+            <button @click="onUpload">Загрузить</button>
+          </div>
         </div>
-        <!-- <div>
-          <p>Прогресс: {{uploadValue.toFixed()+"%"}}
-            <progress id="progress" :value="uploadValue" max="100" ></progress>  </p>
-          </div> -->
-        <div v-if="imageData!=null">
-          <!-- <img class="preview" :src="picture"> -->
-          <br>
-        <button @click="onUpload">Загрузить</button>
+        <hr>
+        <div class="download" >
+          <h4>Удалить файл</h4>
+          <select v-model="selectedDelete">
+            <option v-for="item in nameArray" :key="item.id">{{ item }}</option>
+          </select>
+          <span style="color: blue">{{ selectedDelete }}</span>
+          <div>
+            <button @click="onDelete">Удалить</button>
+          </div>
         </div>
+
       </div>
     </div>
     <div v-else>
@@ -48,6 +54,7 @@
 import firebase from 'firebase';
 import { ref } from 'vue'
 import { useStore } from 'vuex'
+import useDownload  from '../hooks/firebaseDownload';
 // import { onBeforeRouteLeave } from 'vue-router'
 export default {
   setup() {
@@ -57,6 +64,7 @@ export default {
     const inputToggle = ref(false);
     const selected = ref(null);
     const folder = ref(null);
+    const selectedDelete = ref(null);
 
     const store = useStore();
 
@@ -74,6 +82,9 @@ export default {
       case 'Добавить в 5 класс':
         folder.value = 'class5'
         break;
+      case 'Добавить в Фотогалерею':
+        folder.value = 'foto_nikolaustag'
+        break;
       }
 
       picture.value = null;
@@ -87,21 +98,19 @@ export default {
         picture.value = url;
       })})
     }
+    
+    const [ fileArray, nameArray ] = useDownload('foto_nikolaustag');
+    
+    const onDelete = () => {
+      const storageRef = firebase.storage().ref(`foto_nikolaustag/${selectedDelete.value}.jpg`);
 
-    // function sendTextToServer() {
-    //   fetch(`https://teacher-bab78.firebaseio.com/parents.json`,{
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       parentNews: store.state.parentsMessage,
-    //     })
-    //   })
-    // }
-
-    // const sendParents = sendTextToServer;
-    // const sendNews = sendTextToServer('news', store.state.newsMessage);
+      storageRef.delete().then(() => {
+        console.log('file Deleted!');
+      }).catch((error) => {
+          error.message
+          console.log('Something got wrong!');
+      });
+    }
 
     const sendParents = () => {
       fetch('https://teacher-bab78.firebaseio.com/parents.json',{
@@ -127,15 +136,10 @@ export default {
       })
     }
 
-    // onBeforeRouteLeave((_, _2, next) => {
-    //   const userLeave = confirm('Вы точно хотите покинуть страницу');
-    //   next(userLeave);
-    // })
-
     return {
       imageData, picture, uploadValue, previewImage,
-      onUpload, sendParents, sendNews, inputToggle, selected,
-      folder
+      onUpload, onDelete, sendParents, sendNews, inputToggle, selected,
+      selectedDelete, folder, fileArray, nameArray
     }
   },
 }
@@ -199,12 +203,13 @@ export default {
   .download {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 20rem;
+    justify-content: space-around;
+    height: 15rem;
     width: 20rem;
     padding: 0.5rem;
     border:solid;
     border-radius: 5%;
     border-color: blue;
+    margin: 0.5rem;
   }
 </style>

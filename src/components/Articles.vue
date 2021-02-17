@@ -2,9 +2,10 @@
   <div>
     <h2>Новости</h2>
     <p>{{ news }}</p>
+    <hr>
     <h2> Статьи по немецкому языку</h2>
-    <button @click="back" class="prev">Предыдущая статья</button>
-    <button @click="forward" class="next">Следующая статья</button>
+    <button @click="back" class="prev">&#8249;</button>
+    <button @click="forward" class="next">&#8250;</button>
     <component class="article" :is="articleLoop()">
       <p>Default</p>
     </component>  
@@ -19,9 +20,6 @@ import article4 from '../Content/Article5'
 import { ref, onMounted } from 'vue'
 
 export default {
-  components: {
-    article1
-  },
   setup() {
     const selectedArticle = ref(article1);
     const currentPage = ref(1);
@@ -73,17 +71,17 @@ export default {
 </script>
 <style scoped>
  button {
-   background-color: rgba(16, 22, 77, 0.931);
+   background-color: rgba(16, 22, 77, 0.301);
    color: #fff;
    cursor: pointer;
-   width: 8rem;
+   width: 4rem;
    height: 3rem;
    margin: 0.5rem;
-   padding: 0.3rem;
    transition:all 0.5s ease;
    border-radius: 10%;
    border: none;
    text-transform: uppercase;
+   font-size: 2rem;
  }
  button:hover {
    background-color: blue;
