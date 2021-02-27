@@ -9,8 +9,9 @@ export default {
       userId: null,
       token: null,
       didAutologout: false,
-      newsMessage: 'Последние новости',
-      parentsMessage: 'Информация для родителей'
+      newsMessage: '',
+      parentsMessage: '',
+      articleMessage: ''
     };
   },
   mutations,

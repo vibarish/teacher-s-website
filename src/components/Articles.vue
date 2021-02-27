@@ -1,71 +1,75 @@
 ﻿<template>
   <div>
     <h2>Новости</h2>
-    <p>{{ news }}</p>
+    <vue3-markdown-it :source='news' />
     <hr>
-    <h2> Статьи по немецкому языку</h2>
+    <h2> Статьи </h2>
     <button @click="back" class="prev">&#8249;</button>
     <button @click="forward" class="next">&#8250;</button>
-    <component class="article" :is="articleLoop()">
-      <p>Default</p>
-    </component>  
+    <vue3-markdown-it class="article" :source='articleArr[articleArrCounter]' />
   </div>
 </template>
 <script>
-import article1 from '../Content/myArticle';
-import article2 from '../Content/article2';
-import article3 from '../Content/Article3'
-import article4 from '../Content/Article5'
-
-import { ref, onMounted } from 'vue'
+import firebase from 'firebase';
+import useDownload  from '../hooks/firebaseDownload';
+import { ref, reactive, onMounted } from 'vue'
 
 export default {
   setup() {
-    const selectedArticle = ref(article1);
-    const currentPage = ref(1);
-    const news = ref('Новостей пока нет');
+    const [ fileArray, nameArray ] = useDownload('articles');
 
-  const forward = () => {
-    if (currentPage.value > 0 && currentPage.value < 4)
-        currentPage.value += 1
-      else {
-        currentPage.value = 1;
-      }
-  }
+    const news = ref();
+    let articles = ref();
 
-  const back = () => {
-    if (currentPage.value > 1 && currentPage.value < 5)
-        currentPage.value -= 1
-      else {
-        currentPage.value = 4;
-      }
-  }
+    const articleArr = reactive([]);
+    const articleArrCounter = ref(0);
 
-  const articleLoop = () => {
-    switch (currentPage.value) {
-      case 1: return selectedArticle.value = article1;
-      case 2: return selectedArticle.value = article2;
-      case 3: return selectedArticle.value = article3;
-      case 4: return selectedArticle.value = article4;
-    }
-  }
+    const database = firebase.database();
 
-  const getNews = () => {
-    fetch('https://teacher-bab78.firebaseio.com/news.json').then((response) => {
-      if (response.ok) {
-          return response.json();
+    const forward = () => {
+      if (articleArrCounter.value < articleArr.length - 1)
+          articleArrCounter.value += 1;
+        else {
+          articleArrCounter.value = 0;
         }
-    }).then((data) => {
-      news.value = data.currentNews;
+    }
+
+    const back = () => {
+      if (articleArrCounter.value > 0)
+          articleArrCounter.value -= 1;
+        else {
+          articleArrCounter.value = articleArr.length - 1;
+        }
+    }
+
+    const getNews = () => {
+      fetch('https://teacher-bab78.firebaseio.com/news.json').then((response) => {
+        if (response.ok) {
+            return response.json();
+          }
+      }).then((data) => {
+        news.value = data.currentNews;
+      });
+    }
+
+    const articleRef = database.ref('articles/');
+    articleRef.on('value', (data) => {
+      data.forEach((childSnapshot) => {
+        // var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
+        articleArr.push(childData.article);
+        // console.log(childKey);
+    // ...
+  });
     });
-  }
 
-  onMounted(getNews);
+    onMounted(getNews);
 
-  return {
-    selectedArticle, currentPage, news,
-    forward, back, articleLoop, getNews
-  }
+    return {
+      news, forward, back, getNews,
+      fileArray, nameArray, articles,
+      articleArr, articleArrCounter
+    }
   }
 }
 </script>

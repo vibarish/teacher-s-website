@@ -2,6 +2,7 @@
   <div>
     <div v-if="$store.getters.isAuthAsAdmin">
       <h2>Добро пожаловать на страницу администратора!</h2>
+      <div class="pop-up" v-if="popup">Информация успешно отправлена!</div>
       <div >
         <div class="news">
           <label for="current-news" @click="inputToggle = false">Раздел "Новости"</label>
@@ -15,6 +16,13 @@
             cols="10" rows="10">
           </textarea>
           <button @click="sendParents" v-if="inputToggle === true">Опубликовать</button>
+        </div>
+        <div class="news">
+          <label for="current-news" @click="inputToggle = true">Раздел "Статьи"</label>
+          <textarea class="current-news" v-model="$store.state.articleMessage"
+            cols="10" rows="15">
+          </textarea>
+          <button @click="sendArticle">Опубликовать</button>
         </div>
         <hr>
         <div class="download" >
@@ -65,6 +73,8 @@ export default {
     const selected = ref(null);
     const folder = ref(null);
     const selectedDelete = ref(null);
+
+    const popup = ref(false);
 
     const store = useStore();
 
@@ -121,7 +131,12 @@ export default {
         body: JSON.stringify({
           parentNews: store.state.parentsMessage,
         })
-      })
+      }).then(() => {
+        popup.value = true;
+        setTimeout(() => {
+          popup.value = false;
+        }, 3000)
+      });
     }
 
     const sendNews = () => {
@@ -133,13 +148,35 @@ export default {
         body: JSON.stringify({
           currentNews: store.state.newsMessage,
         })
-      })
+      }).then(() => {
+        popup.value = true;
+        setTimeout(() => {
+          popup.value = false;
+        }, 3000)
+      });
+    }
+
+    const sendArticle = () => {
+      fetch('https://teacher-bab78.firebaseio.com/articles.json',{
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          article: store.state.articleMessage,
+        })
+      }).then(() => {
+        popup.value = true;
+        setTimeout(() => {
+          popup.value = false;
+        }, 3000);
+      }).then(() => store.state.articleMessage = '');
     }
 
     return {
       imageData, picture, uploadValue, previewImage,
-      onUpload, onDelete, sendParents, sendNews, inputToggle, selected,
-      selectedDelete, folder, fileArray, nameArray
+      onUpload, onDelete, sendParents, sendNews, sendArticle, inputToggle, selected,
+      selectedDelete, folder, fileArray, nameArray, popup
     }
   },
 }
@@ -211,5 +248,20 @@ export default {
     border-radius: 5%;
     border-color: blue;
     margin: 0.5rem;
+  }
+  .pop-up {
+    color:white;
+    border: seashell;
+    position: absolute;
+    top: 40rem;
+    left: 40rem;
+    font-size: 1.3rem;
+    background-color: blue;
+    padding: 0.5rem;
+    border-radius: 10%;
+    display: flex;
+    height: 6rem;
+    width: 10rem;
+    text-align: center;
   }
 </style>
