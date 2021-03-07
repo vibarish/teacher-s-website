@@ -96,4 +96,7 @@ export default {
    padding: 0.5rem;
    border-radius: 1rem;
  }
+img {
+  width: 60rem;
+}
 </style>
