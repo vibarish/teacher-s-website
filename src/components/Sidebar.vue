@@ -6,8 +6,7 @@
     </button>
     <h3>О сайте</h3>
     <p>
-      Сайт учителя немецкого языка <br>  Барышниковой Татьяны Олеговны <br>
-      (ГБОУ СОШ 111 г. Санкт-Петербург)
+      Сайт учителя немецкого языка <br>
     </p>
     <form class="input-form" @submit.prevent="submitForm">
       <div v-if="!isLoggedIn">

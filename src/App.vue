@@ -5,7 +5,7 @@
 </div>
 </template>
 <script>
-import Head from './components/Header'
+import myHeader from './components/Header'
 import myFooter from './components/Footer'
 // import Nav from './components/Navigation'
 
@@ -20,9 +20,7 @@ export default {
     }
   },
   components: {
-    myFooter,
-    // myContent: Main,
-    myHeader: Head,
+    myFooter, myHeader
   },
   created() {
     this.$store.dispatch('autologin');
