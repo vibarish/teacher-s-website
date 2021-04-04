@@ -1,24 +1,9 @@
 ﻿<template>
   <div>
-    <div>
-        <div>
-          <div>
-      <h2>Контактные данные</h2>
-        <i>Здравствуйте!</i>
-      <br>
-      Меня зовут Барышникова Татьяна Олеговна. 
-
-      <p>Я учитель немецкого языка школы №111 Калининского района Санкт-Петербурга.
-       Окончила Ленинградский государственный университет имени А. С. Пушкина, факультет иностранных языков(немецкий и английский) в 2012.
-      </p>
-      <p>
-      e-mail: baryschnickowa.t@yandex.ru
-      </p>
-            <img src="../Content/img/tatiana.jpg" alt="" sizes="" srcset="">
-          </div>
-        </div>
+    <h2>Обо мне</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta velit non bibendum bibendum. Nulla ullamcorper aliquam orci non consequat. Aliquam sit amet lacinia dolor, sed laoreet mi. Praesent pellentesque lacus ipsum, nec tincidunt nulla elementum vel. Aliquam malesuada porttitor elit eget ultrices. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed pretium varius ante quis varius. Vivamus vitae mi leo. Suspendisse potenti</p>
+    <p>Nunc sed nisl ornare, scelerisque lectus et, aliquam lectus. Aenean at quam blandit, suscipit arcu ullamcorper, aliquam purus. Curabitur arcu tellus, cursus vitae imperdiet non, rhoncus sit amet quam. Aenean nec venenatis eros. Praesent non augue vitae sem fermentum lacinia in vulputate mi. Curabitur mattis felis vitae odio maximus, quis ultricies magna ullamcorper. Curabitur fringilla dui in purus pellentesque pulvinar. Pellentesque ac tempus nulla, vitae volutpat massa. Curabitur a finibus nibh, quis venenatis massa. Aliquam scelerisque ligula vel purus posuere aliquam.</p>
   </div>
-</div>
 </template>
 <style scoped>
   img {

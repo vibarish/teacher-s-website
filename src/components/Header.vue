@@ -7,38 +7,35 @@
     </div>
     <!-- Занавес -->
     <main v-if="sidebarIsActive" @click="sideBarHandler" class="backdrop"></main>
-    <div>
-      <header class="header" @mouseleave="outHandler" @ontouchcancel="outHandler">
-        <div class="container">
-          <div class="header_body">
-            <div class="header_logo" @click="sideBarHandler">
-              <span>Сайт учителя немецкого языка </span> 
-            </div>
-            <div @click="activeHandler"
-                 :class="{isActive}"
-                 class="header_burger"
-                 >
-              <span> </span>
-            </div>
-            <nav class="header_menu" :class="{isActive}">
-              <div class="header_list">
-                <router-link to="/" >На главную</router-link>
-                <router-link to="/contacts" >Контакты </router-link>
-                <router-link to="/method" > Методика </router-link>
-                <router-link to="/kids" >Ученикам </router-link>
-                <router-link to="/parents" >Родителям </router-link>
-                <router-link to="/media" >Фото </router-link>
-                <router-link to="/admin" v-if="isAdminLogged" > Админ </router-link>
-              </div>
-            </nav>
+    <header class="header" @mouseleave="outHandler" @ontouchcancel="outHandler">
+      <div class="container">
+        <div class="header_body">
+          <div class="header_logo" @click="sideBarHandler">
+            <span>Сайт учителя немецкого языка </span> 
           </div>
+          <div @click="activeHandler"
+                :class="{isActive}"
+                class="header_burger"
+                >
+          </div>
+          <nav class="header_menu" :class="{isActive}">
+            <div class="header_list">
+              <router-link to="/" >На главную</router-link>
+              <router-link to="/contacts" >Контакты </router-link>
+              <router-link to="/method" > Методика </router-link>
+              <router-link to="/kids" >Ученикам </router-link>
+              <router-link to="/parents" >Родителям </router-link>
+              <router-link to="/media" >Фото </router-link>
+              <router-link to="/admin" v-if="isAdminLogged" > Админ </router-link>
+            </div>
+          </nav>
         </div>
-      </header>
-      <span v-if="isLoggedIn && !isAdminLogged" id="idNote">Вы авторизованы </span>
-      <span v-if="isAdminLogged" id="idNote">Вы авторизованы как администратор </span>
-        <div id="dinamic-content">
-          <router-view></router-view>
-        </div>
+      </div>
+    </header>
+    <span v-if="isLoggedIn && !isAdminLogged" id="idNote">Вы авторизованы </span>
+    <span v-if="isAdminLogged" id="idNote">Вы авторизованы как администратор </span>
+    <div id="dinamic-content">
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -104,6 +101,8 @@ import Sidebar from './Sidebar.vue';
     min-height: calc(100vh - 5rem);
     margin: 0;
     padding: 0;
+        /* background-image: url("../Content/img/bundestag.jpg");
+    background-repeat: no-repeat; */
   }
   .backdrop {
     background-color: rgba(66, 71, 66, 0.76);
@@ -123,6 +122,7 @@ import Sidebar from './Sidebar.vue';
     position: relative;
     margin: 0;
     cursor: pointer;
+    /* object-fit: fill; */
   }
   #idNote {
     font-size: 1.2rem;
@@ -298,13 +298,11 @@ import Sidebar from './Sidebar.vue';
 
   }
   
-  /* span.router-link-active {
-    color:rgb(75, 214, 219);
-  } */
   #dinamic-content{
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 1rem;
+    background-color: rgba(255, 235, 205, 0.397);
   }
 </style>
