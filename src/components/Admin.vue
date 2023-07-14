@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="$store.getters.isAuthAsAdmin">
-      <h2>Добро пожаловать на страницу администратора!</h2>
+      <h2>Cтраница администратора</h2>
       <div class="pop-up" v-if="popup">Информация успешно отправлена!</div>
       <div >
         <div class="news">
@@ -59,127 +59,127 @@
   </div>
 </template>
 <script>
-import firebase from 'firebase';
-import { ref } from 'vue'
-import { useStore } from 'vuex'
-import useDownload  from '../hooks/firebaseDownload';
-// import { onBeforeRouteLeave } from 'vue-router'
-export default {
-  setup() {
-    const imageData = ref(null);
-    const picture = ref(null);
-    const uploadValue = ref(0);
-    const inputToggle = ref(false);
-    const selected = ref(null);
-    const folder = ref(null);
-    const selectedDelete = ref(null);
+  import firebase  from '../firebaseInit.js';
+  import { ref } from 'vue'
+  import { useStore } from 'vuex'
+  import useDownload  from '../hooks/firebaseDownload';
+  // import { onBeforeRouteLeave } from 'vue-router'
+  export default {
+    setup() {
+      const imageData = ref(null);
+      const picture = ref(null);
+      const uploadValue = ref(0);
+      const inputToggle = ref(false);
+      const selected = ref(null);
+      const folder = ref(null);
+      const selectedDelete = ref(null);
 
-    const popup = ref(false);
+      const popup = ref(false);
 
-    const store = useStore();
+      const store = useStore();
 
-    const previewImage = () => {
-      uploadValue.value = 0;
-      picture.value = 0;
-      imageData.value = event.target.files[0];
-    }
-
-    const onUpload = () => {
-      switch (selected.value) {
-      case 'Добавить в методику':
-        folder.value = 'metod'
-        break;
-      case 'Добавить в 5 класс':
-        folder.value = 'class5'
-        break;
-      case 'Добавить в Фотогалерею':
-        folder.value = 'foto_nikolaustag'
-        break;
+      const previewImage = () => {
+        uploadValue.value = 0;
+        picture.value = 0;
+        imageData.value = event.target.files[0];
       }
 
-      picture.value = null;
-      const storageRef = firebase.storage().ref(`${folder.value}/${imageData.value.name}`).put(imageData.value);
+      const onUpload = () => {
+        switch (selected.value) {
+        case 'Добавить в методику':
+          folder.value = 'metod'
+          break;
+        case 'Добавить в 5 класс':
+          folder.value = 'class5'
+          break;
+        case 'Добавить в Фотогалерею':
+          folder.value = 'foto_nikolaustag'
+          break;
+        }
+
+        picture.value = null;
+        const storageRef = firebase.storage().ref(`${folder.value}/${imageData.value.name}`).put(imageData.value);
+        
+        storageRef.on(`state_changed`, snapshot => {
+          uploadValue.value = (snapshot.bytesTransferred/snapshot.totalBytes) * 1000;
+        }, error => {console.log(error.message)},
+        () => {uploadValue.value = 100;
+        storageRef.snapshot.ref.getDownloadUrl().then((url) => {
+          picture.value = url;
+        })})
+      }
       
-      storageRef.on(`state_changed`, snapshot => {
-        uploadValue.value = (snapshot.bytesTransferred/snapshot.totalBytes) * 1000;
-      }, error => {console.log(error.message)},
-      () => {uploadValue.value = 100;
-      storageRef.snapshot.ref.getDownloadUrl().then((url) => {
-        picture.value = url;
-      })})
-    }
-    
-    const [ fileArray, nameArray ] = useDownload('foto_nikolaustag');
-    
-    const onDelete = () => {
-      const storageRef = firebase.storage().ref(`foto_nikolaustag/${selectedDelete.value}.jpg`);
+      const [ fileArray, nameArray ] = useDownload('foto_nikolaustag');
+      
+      const onDelete = () => {
+        const storageRef = firebase.storage().ref(`foto_nikolaustag/${selectedDelete.value}.jpg`);
 
-      storageRef.delete().then(() => {
-        console.log('file Deleted!');
-      }).catch((error) => {
-          error.message
-          console.log('Something got wrong!');
-      });
-    }
+        storageRef.delete().then(() => {
+          console.log('file Deleted!');
+        }).catch((error) => {
+            error.message
+            console.log('Something got wrong!');
+        });
+      }
 
-    const sendParents = () => {
-      fetch('https://teacher-bab78.firebaseio.com/parents.json',{
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          parentNews: store.state.parentsMessage,
-        })
-      }).then(() => {
-        popup.value = true;
-        setTimeout(() => {
-          popup.value = false;
-        }, 3000)
-      });
-    }
+      const sendParents = () => {
+        fetch('https://teacher-bab78.firebaseio.com/parents.json',{
+          method: 'PUT',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            parentNews: store.state.parentsMessage,
+          })
+        }).then(() => {
+          popup.value = true;
+          setTimeout(() => {
+            popup.value = false;
+          }, 3000)
+        });
+      }
 
-    const sendNews = () => {
-      fetch('https://teacher-bab78.firebaseio.com/news.json',{
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          currentNews: store.state.newsMessage,
-        })
-      }).then(() => {
-        popup.value = true;
-        setTimeout(() => {
-          popup.value = false;
-        }, 3000)
-      });
-    }
+      const sendNews = () => {
+        fetch('https://teacher-bab78.firebaseio.com/news.json',{
+          method: 'PUT',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            currentNews: store.state.newsMessage,
+          })
+        }).then(() => {
+          popup.value = true;
+          setTimeout(() => {
+            popup.value = false;
+          }, 3000)
+        });
+      }
 
-    const sendArticle = () => {
-      fetch('https://teacher-bab78.firebaseio.com/articles.json',{
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          article: store.state.articleMessage,
-        })
-      }).then(() => {
-        popup.value = true;
-        setTimeout(() => {
-          popup.value = false;
-        }, 3000);
-      }).then(() => store.state.articleMessage = '');
-    }
+      const sendArticle = () => {
+        fetch('https://teacher-bab78.firebaseio.com/articles.json',{
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            article: store.state.articleMessage,
+          })
+        }).then(() => {
+          popup.value = true;
+          setTimeout(() => {
+            popup.value = false;
+          }, 3000);
+        }).then(() => store.state.articleMessage = '');
+      }
 
-    return {
-      imageData, picture, uploadValue, previewImage,
-      onUpload, onDelete, sendParents, sendNews, sendArticle, inputToggle, selected,
-      selectedDelete, folder, fileArray, nameArray, popup
-    }
-  },
-}
+      return {
+        imageData, picture, uploadValue, previewImage,
+        onUpload, onDelete, sendParents, sendNews, sendArticle, inputToggle, selected,
+        selectedDelete, folder, fileArray, nameArray, popup
+      }
+    },
+  }
 </script>
 <style scoped>
   /* div {

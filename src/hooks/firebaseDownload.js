@@ -1,11 +1,13 @@
 import { reactive } from 'vue';
-import firebase from 'firebase';
+import firebase from '../firebaseInit.js';
+import ref from "firebase";
 
 export default function useDownload(folder) {
   const fileArray = reactive([]);
   const nameArray = reactive([]);
 
-  const storage = firebase.storage();
+  const storage = firebase.storage()
+  // const storage = getStorage(firebase)
   const listRef = storage.ref(folder);
 
   listRef.listAll()

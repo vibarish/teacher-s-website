@@ -1,26 +1,22 @@
 <template>
-<div>
+<div id="app">
   <myHeader></myHeader>
   <myFooter></myFooter>
 </div>
 </template>
 <script>
-import myHeader from './components/Header'
-import myFooter from './components/Footer'
-// import Nav from './components/Navigation'
+import myHeader from './components/Header.vue'
+import myFooter from './components/Footer.vue'
+import { ref } from 'vue';
 
-// Modal opens
-// document.body.classList.add('modal-open');
-// // Modal closes
-// document.body.classList.remove('modal-closed');
 export default {
-  data() {
-    return{
-      blockScroll:false
-    }
-  },
+  name: "App",
   components: {
-    myFooter, myHeader
+    myHeader, myFooter
+  },
+  setup() {
+  const blockScroll = ref(false)
+  return { blockScroll }
   },
   created() {
     this.$store.dispatch('autologin');
@@ -28,14 +24,12 @@ export default {
   computed: { 
     didAutologout() {
       return this.$store.getters.didAutologout;
-    }
-  },
-  watch: {
+    }},
+    watch: {
     didAutologout(currentValue, oldValue) {
       if (currentValue && currentValue !== oldValue) {
          this.$router.replace('/kids');
-      }
-    }
+      }}
   }
 }
 </script>

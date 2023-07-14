@@ -6,7 +6,7 @@
     </button>
     <h3>О сайте</h3>
     <p>
-      Сайт учителя немецкого языка <br>
+      Vasiliy's page <br>
     </p>
     <form class="input-form" @submit.prevent="submitForm">
       <div v-if="!isLoggedIn">
@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import firebase from "firebase";
+import firebase from '../firebaseInit.js'
 import { computed, ref, watch } from 'vue';
 import { useStore } from 'vuex'
 

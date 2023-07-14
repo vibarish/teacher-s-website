@@ -1,19 +1,19 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import grade4 from '../Content/Kids/Grade4'
-import grade5 from '../Content/Kids/Grade5'
-import grade6 from '../Content/Kids/Grade6'
-import grade7 from '../Content/Kids/Grade7'
+import grade4 from '../Content/Kids/Grade4.vue'
+import grade5 from '../Content/Kids/Grade5.vue'
+import grade6 from '../Content/Kids/Grade6.vue'
+import grade7 from '../Content/Kids/Grade7.vue'
 
-import article from '../components/Articles'
-import contacts from '../components/Contacts'
-import method from '../components/Method'
-import kidsInfo from '../components/Kids'
-import parents from '../components/Parents'
-import media from '../components/Media'
-import admin from '../components/Admin'
-import sidebar from '../components/Sidebar'
-import notFound from '../components/NotFound'
+import article from '../components/Articles.vue'
+import contacts from '../components/Contacts.vue'
+import projects from '../components/Projects.vue'
+import kidsInfo from '../components/Kids.vue'
+import parents from '../components/Parents.vue'
+import media from '../components/Media.vue'
+import admin from '../components/Admin.vue'
+import sidebar from '../components/Sidebar.vue'
+import notFound from '../components/NotFound.vue'
 
 // import { store } from '../main'
 
@@ -44,9 +44,9 @@ const routes = [
     component: contacts
   },
   {
-    path: '/method',
-    name: 'Методика',
-    component: method
+    path: '/projects',
+    name: 'Проекты',
+    component: projects
   },
   {
     path: '/kids',

@@ -1,6 +1,6 @@
 ﻿<template>
   <div class="wrapper" :class="{isActive}">
-      <img @click="sideBarHandler" src="../Content/img/bundestag_cr.jpg">
+      <img @click="sideBarHandler" src="../Content/img/developer.avif">
       
     <div class="sidebar" :class="{sidebarIsActive}" >
       <sidebar-component @close-bar="sideBarHandler"></sidebar-component>
@@ -11,7 +11,8 @@
       <div class="container">
         <div class="header_body">
           <div class="header_logo" @click="sideBarHandler">
-            <span>Сайт учителя немецкого языка </span> 
+            <span>Василий Барышников</span> 
+            <!-- <span>Войдите или зарегестрируйтесь</span>  -->
           </div>
           <div @click="activeHandler"
                 :class="{isActive}"
@@ -20,11 +21,11 @@
           </div>
           <nav class="header_menu" :class="{isActive}">
             <div class="header_list">
-              <router-link to="/" >На главную</router-link>
-              <router-link to="/contacts" >Контакты </router-link>
-              <router-link to="/method" > Методика </router-link>
-              <router-link to="/kids" >Ученикам </router-link>
-              <router-link to="/parents" >Родителям </router-link>
+              <router-link to="/" >Главная</router-link>
+              <router-link to="/contacts" >Обо Мне </router-link>
+              <router-link to="/projects" > Мои Проекты </router-link>
+              <router-link to="/kids" >Мои Хобби </router-link>
+              <!-- <router-link to="/parents" >Родителям </router-link> -->
               <router-link to="/media" >Фото </router-link>
               <router-link to="/admin" v-if="isAdminLogged" > Админ </router-link>
             </div>
@@ -101,8 +102,6 @@ import Sidebar from './Sidebar.vue';
     min-height: calc(100vh - 10rem);
     margin: 0;
     padding: 0;
-        /* background-image: url("../Content/img/bundestag.jpg");
-    background-repeat: no-repeat; */
   }
   .backdrop {
     background-color: rgba(66, 71, 66, 0.76);

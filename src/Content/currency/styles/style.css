@@ -1,0 +1,181 @@
+:root {
+  --theme-color: rgb(114, 35, 84);
+  font-family: 'Sunflower', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Comfortaa', cursive, Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(236, 231, 255, 0.995);
+}
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  border-style: outset;
+  border-radius: 2%;
+  transition: all 0.5s ease-in ;
+  background-color: white;
+  padding: 5px;
+  width: 90%;
+}
+header {
+  color: rgb(114, 35, 84);
+}
+.currency-table {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  justify-content: space-around;
+  align-content: center;
+  align-items: center;
+  font-size: 18px;
+  margin: 15px 0;
+}
+input {
+  display: flex;
+  padding: 0.6rem;
+  margin: 0.4rem;
+  border-radius: 5%;
+  font-size: 20px;
+  width: 60%;
+  border-style: dotted;
+}
+#calendar {
+  width: 180px;
+}
+
+table, th, td {
+  border: 0.5px ridge var(--theme-color);
+  text-align: center;
+  margin: 10px;
+  border-collapse: collapse;
+}
+
+#stock-tab {
+  min-width: 450px;
+}
+
+th, td {
+  padding: 5px;
+}
+
+.icon {
+  font-size: 25px;
+}
+
+th {
+  background-color: var(--theme-color);
+  color: white;
+}
+
+tr:hover {
+  background-color: rgb(114, 35, 84);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in;
+}
+
+.currency-dynamic-less {
+  color: red;
+}
+
+.currency-dynamic-more {
+  color: green;
+}
+
+.history {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
+}
+#history-rate {
+  font-size: 25px;
+  color: var(--theme-color);
+  width: 200px;
+  height: 50px;
+}
+
+h4, p {
+  margin: 5px;
+}
+
+#currency-radio {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin: 5px;
+}
+
+#euro-radio, #usd-radio {
+  height: 25px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.popup {
+  display: none;
+  border-radius: 5%;
+  position: absolute;
+  z-index: 2;
+  background-color: rgb(221, 201, 201);
+  width: 100px;
+  height: 70px;
+  padding: 2px;
+  font-size: 14px;
+}
+.visible {
+  display: flex;
+}
+
+.chart-container {
+  position: relative;
+  /* max-height: 400px;
+  max-width: 400px; */
+  width: 90%;
+}
+
+@media (max-width: 800px) {
+  .history {
+    flex-direction: column;
+  }
+  #stock-tab {
+    min-width: 200px;
+  }
+  #currency-radio {
+    flex-direction: row;
+  }
+  table, th, td {
+    margin: 2px;
+  }
+  h4, p {
+    margin: 3px;
+  }
+  input {
+    padding: 0.3rem;
+    /* margin: 0.2rem; */
+    /* width: 70px; */
+  }
+}
+
+@media (min-width: 1200px) {
+  #tabs {
+    display: flex;
+    flex-direction: row;
+  }
+}

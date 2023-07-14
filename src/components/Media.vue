@@ -117,7 +117,7 @@ export default {
    justify-content: space-between;
    position: relative;
    top: 10rem;
- };
+ }
  .picCaorusel {
    display: flex;
    flex-direction: column;

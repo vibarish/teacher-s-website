@@ -11,7 +11,7 @@
         <router-link to="/kids" >Ученикам </router-link>
         <router-link to="/parents" >Родителям </router-link>
         <router-link to="/media" >Фото </router-link>
-        <router-link to="/admin" v-if="isAdminLogged" > Админ </router-link>
+        <!-- <router-link to="/admin" v-if="isAdminLogged" > Админ </router-link> -->
       </div>
     </footer>
   </div>

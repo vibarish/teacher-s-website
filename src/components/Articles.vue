@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import firebase from 'firebase';
+import firebase from '../firebaseInit.js';
 import useDownload  from '../hooks/firebaseDownload';
 import { ref, reactive, onMounted } from 'vue'
 
